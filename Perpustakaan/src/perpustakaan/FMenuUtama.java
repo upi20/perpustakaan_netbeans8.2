@@ -18,6 +18,7 @@ public class FMenuUtama extends javax.swing.JFrame {
      */
     public FMenuUtama() {
         initComponents();
+        this.setResizable(false);
     }
 
     /**
@@ -170,6 +171,7 @@ public class FMenuUtama extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -187,7 +189,9 @@ public class FMenuUtama extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        FBuku buku = new FBuku();
+        buku.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     

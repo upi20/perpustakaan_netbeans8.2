@@ -6,6 +6,7 @@
 package perpustakaan;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -43,5 +44,33 @@ public class Data {
     // get data
     public static String[][] getPeminjaman(){
         return Data.peminjaman;
+    }
+    
+    // buku
+    // get
+    public static String[][] getBuku(){
+        return Data.buku;
+    } 
+    
+    public static boolean insertBuku(String[] newBuku){
+        String[][] newArr = new String[Data.buku.length+1][6];
+        int len = Data.buku.length;
+        for (int i = 0; i <= len; i++) {
+            for (int j = 0; j < 6; j++) {
+                if(i < len){
+                    newArr[i][j] = Data.buku[i][j];
+                } else{
+                    newArr[i][j] = newBuku[j];
+                }
+            }
+        }   
+        Data.buku = newArr;
+        return true;
+    }
+    
+      
+    public static boolean deleteBuku(){
+        
+        return true;
     }
 }
