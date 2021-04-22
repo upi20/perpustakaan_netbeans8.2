@@ -54,8 +54,11 @@ public class Data {
     
     public static boolean insertBuku(String[] newBuku){
         String[][] newArr = new String[Data.buku.length+1][6];
+        Boolean result = true;
+
         int len = Data.buku.length;
         for (int i = 0; i <= len; i++) {
+            // menyimpan data ke temp
             for (int j = 0; j < 6; j++) {
                 if(i < len){
                     newArr[i][j] = Data.buku[i][j];
@@ -63,9 +66,22 @@ public class Data {
                     newArr[i][j] = newBuku[j];
                 }
             }
-        }   
-        Data.buku = newArr;
-        return true;
+            
+            // cek data nomor yang sama
+            if(i < len){
+                if(Data.buku[i][0].equals(newBuku[0])){
+                    result = false;
+                    break;
+                }  
+            }
+        }
+        
+        // jika tidak ada data yang sama maka akan di insert
+        if(result){
+            Data.buku = newArr;
+        }
+    
+        return result;
     }
     
       

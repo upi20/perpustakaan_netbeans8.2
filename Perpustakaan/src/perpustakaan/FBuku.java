@@ -159,6 +159,11 @@ public class FBuku extends javax.swing.JFrame {
                 tambahNomorActionPerformed(evt);
             }
         });
+        tambahNomor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tambahNomorKeyTyped(evt);
+            }
+        });
 
         tambahNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,6 +186,11 @@ public class FBuku extends javax.swing.JFrame {
         tambahTahun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tambahTahunActionPerformed(evt);
+            }
+        });
+        tambahTahun.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tambahTahunKeyTyped(evt);
             }
         });
 
@@ -299,6 +309,11 @@ public class FBuku extends javax.swing.JFrame {
         ubahTahun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ubahTahunActionPerformed(evt);
+            }
+        });
+        ubahTahun.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ubahTahunKeyTyped(evt);
             }
         });
 
@@ -440,16 +455,15 @@ public class FBuku extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowDeactivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowDeactivated
-    FMenuUtama pustakawan = new FMenuUtama();
-    pustakawan.setVisible(true);
+
     // TODO add your handling code here:
     }//GEN-LAST:event_formWindowDeactivated
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            FMenuUtama pustakawan = new FMenuUtama();
-            pustakawan.setVisible(true);
-            this.dispose();
-            // TODO add your handling code here:
+        FMenuUtama pustakawan = new FMenuUtama();
+        pustakawan.setVisible(true);
+        this.dispose();
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -517,18 +531,62 @@ public class FBuku extends javax.swing.JFrame {
     }//GEN-LAST:event_tableBukuMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String[] newRow = {
-            tambahNomor.getText(),
-            tambahNama.getText(),
-            tambahPenulis.getText(),
-            tambahPenerbit.getText(),
-            tambahTahun.getText(),
-            tambahKategori.getText()
-        };
-        Data.insertBuku(newRow);
-        refreshBuku();
-        // TODO add your handling code here:
+        if (tambahNomor.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nomor harus di isi");
+            tambahNomor.requestFocus();
+        }else if(tambahNama.getText().equals("")){
+            tambahNama.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nama harus di isi"); 
+        }else if(tambahPenulis.getText().equals("")){
+            tambahPenulis.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, penulis harus di isi"); 
+        }else if(tambahPenerbit.getText().equals("")){
+            tambahPenerbit.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, penerbit harus di isi"); 
+        }else if(tambahTahun.getText().equals("")){
+            tambahTahun.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, tahun harus di isi"); 
+        }else if(tambahKategori.getText().equals("")){
+            tambahKategori.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, kategori harus di isi"); 
+        }else{
+            String[] newRow = {
+                tambahNomor.getText(),
+                tambahNama.getText(),
+                tambahPenulis.getText(),
+                tambahPenerbit.getText(),
+                tambahTahun.getText(),
+                tambahKategori.getText()
+            };
+            if(Data.insertBuku(newRow)){
+                refreshBuku();
+                JOptionPane.showMessageDialog(null, "Data buku berhasil ditambahkan");
+            }else{
+                JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nomor buku sudah ada");
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tambahNomorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tambahNomorKeyTyped
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tambahNomorKeyTyped
+
+    private void tambahTahunKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tambahTahunKeyTyped
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tambahTahunKeyTyped
+
+    private void ubahTahunKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ubahTahunKeyTyped
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_ubahTahunKeyTyped
 
     /**
      * @param args the command line arguments
