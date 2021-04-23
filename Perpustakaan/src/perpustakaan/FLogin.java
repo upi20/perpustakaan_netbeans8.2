@@ -5,6 +5,10 @@
  */
 package perpustakaan;
 
+import com.mysql.jdbc.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,6 +18,8 @@ import javax.swing.JOptionPane;
  */
 public class FLogin extends javax.swing.JFrame {
 
+    Connection con;
+    Statement st;
     /**
      * Creates new form Flogin
      */
@@ -126,14 +132,22 @@ public class FLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(Data.userpus.equals(username.getText()) && Data.passpus.equals(password.getText())){
-            FMenuUtama pustakawan = new FMenuUtama();
-            pustakawan.setVisible(true);
-            this.dispose();
-        }else{
-            JFrame jf=new JFrame();
-            jf.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(jf, "Username atau password salah");
+        try{
+            String pass = new String(password.getPassword());
+            con = Koneksi.getKoneksi();
+            String sql = "SELECT * FROM admin WHERE username='"+username.getText()+"' and password='"+pass+"'";
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            if(rs.next()){
+                if(username.getText().equals(rs.getString("username")) && pass.equals(rs.getString("password"))){
+                new FMenuUtama().setVisible(true);
+                dispose();
+                }
+            }else{
+                    JOptionPane.showMessageDialog(null, "Login gagal silahkan periksa username dan password anda");
+                }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

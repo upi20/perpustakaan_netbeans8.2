@@ -5,6 +5,10 @@
  */
 package perpustakaan;
 
+import com.mysql.jdbc.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -15,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Isepl
  */
 public class FBuku extends javax.swing.JFrame {
-
+    Connection con;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form FBuku
      */
@@ -27,10 +33,27 @@ public class FBuku extends javax.swing.JFrame {
     }
     
     private void refreshBuku(){
-        DefaultTableModel tblmodel = (DefaultTableModel) tableBuku.getModel();
-        tblmodel.setRowCount(0);
-        for (int i = 0; i < Data.getBuku().length; i++) {
-            tblmodel.addRow(Data.getBuku()[i]);
+        try{
+            con = Koneksi.getKoneksi();
+            String sql1 = "SELECT * FROM buku order by id_buku ASC";
+            st = con.createStatement();
+            rs = st.executeQuery(sql1);
+            DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
+            model.setRowCount(0);
+            while(rs.next()){
+                Object[] row = new Object[13];
+                row[0] = rs.getString("id_buku");
+                row[1] = rs.getString("judul_buku");
+                row[2] = rs.getString("pengarang");
+                row[3] = rs.getString("penerbit");
+                row[4] = rs.getString("tahun");
+                row[5] = rs.getString("genre");
+                row[6] = rs.getString("stok");
+                
+                model.addRow(row);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
         }
     }
 
@@ -77,6 +100,9 @@ public class FBuku extends javax.swing.JFrame {
         ubahPenulis = new javax.swing.JTextField();
         ubahTahun = new javax.swing.JTextField();
         ubahKategori = new javax.swing.JTextField();
+        ubahStok = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("DATA BUKU");
@@ -91,17 +117,17 @@ public class FBuku extends javax.swing.JFrame {
 
         tableBuku.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nomor", "Nama", "Penulis", "Penerbit", "Tahun", "Kategori"
+                "Nomor", "Nama", "Penulis", "Penerbit", "Tahun", "Kategori", "Stok"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -121,6 +147,7 @@ public class FBuku extends javax.swing.JFrame {
             tableBuku.getColumnModel().getColumn(3).setResizable(false);
             tableBuku.getColumnModel().getColumn(4).setResizable(false);
             tableBuku.getColumnModel().getColumn(5).setResizable(false);
+            tableBuku.getColumnModel().getColumn(6).setResizable(false);
         }
 
         jButton1.setText("Kembali");
@@ -254,13 +281,18 @@ public class FBuku extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tambahKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(jButton3))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ubah Data Buku"));
 
         jButton5.setText("Ubah data buku");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Hapus data buku");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -323,34 +355,51 @@ public class FBuku extends javax.swing.JFrame {
             }
         });
 
+        ubahStok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ubahStokActionPerformed(evt);
+            }
+        });
+        ubahStok.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ubahStokKeyTyped(evt);
+            }
+        });
+
+        jLabel18.setText("Stok");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ubahNomor)
-                    .addComponent(ubahNama)
-                    .addComponent(ubahPenulis)
-                    .addComponent(ubahPenerbit)
-                    .addComponent(ubahTahun)
-                    .addComponent(ubahKategori))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+                        .addComponent(jButton6)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel18))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ubahStok, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                            .addComponent(ubahNomor)
+                            .addComponent(ubahNama)
+                            .addComponent(ubahPenulis)
+                            .addComponent(ubahPenerbit)
+                            .addComponent(ubahTahun)
+                            .addComponent(ubahKategori))))
                 .addContainerGap())
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
-                .addComponent(jButton6)
-                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,11 +428,17 @@ public class FBuku extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(ubahKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(ubahStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton6)))
         );
+
+        jLabel14.setText("*Klik untuk mengubah");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -397,7 +452,9 @@ public class FBuku extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
                         .addGap(0, 537, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,8 +474,10 @@ public class FBuku extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel14)
+                .addGap(24, 24, 24)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,8 +487,8 @@ public class FBuku extends javax.swing.JFrame {
                     .addContainerGap(547, Short.MAX_VALUE)))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addGap(334, 334, 334)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap(334, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );
 
@@ -463,11 +522,17 @@ public class FBuku extends javax.swing.JFrame {
         FMenuUtama pustakawan = new FMenuUtama();
         pustakawan.setVisible(true);
         this.dispose();
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    // hapus data buku
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        // validasi nomor buku yang akan di hapus
+        if (!ubahNomor.getText().equals("")) {
+            System.out.println(Data.deleteBuku(ubahNomor.getText()));
+            refreshBuku();
+        }else{
+            JOptionPane.showMessageDialog(null, "Gagal menghapus data, nomor pilih buku terlebih dahulu");
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void ubahNomorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ubahNomorActionPerformed
@@ -518,6 +583,7 @@ public class FBuku extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tambahNomorActionPerformed
 
+    // tabel buku di klik
     private void tableBukuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBukuMouseClicked
        int row = tableBuku.rowAtPoint(evt.getPoint());
        ubahNomor.setText(tableBuku.getValueAt(row, 0).toString());
@@ -526,10 +592,10 @@ public class FBuku extends javax.swing.JFrame {
        ubahPenerbit.setText(tableBuku.getValueAt(row, 3).toString());
        ubahTahun.setText(tableBuku.getValueAt(row, 4).toString());
        ubahKategori.setText(tableBuku.getValueAt(row, 5).toString());
-        
-        // TODO add your handling code here:
+       ubahStok.setText(tableBuku.getValueAt(row, 6).toString());
     }//GEN-LAST:event_tableBukuMouseClicked
 
+    // Tambah buku
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (tambahNomor.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nomor harus di isi");
@@ -550,23 +616,35 @@ public class FBuku extends javax.swing.JFrame {
             tambahKategori.requestFocus();
             JOptionPane.showMessageDialog(null, "Gagal menambahkan data, kategori harus di isi"); 
         }else{
-            String[] newRow = {
-                tambahNomor.getText(),
-                tambahNama.getText(),
-                tambahPenulis.getText(),
-                tambahPenerbit.getText(),
-                tambahTahun.getText(),
-                tambahKategori.getText()
-            };
-            if(Data.insertBuku(newRow)){
+            try{
+                con = Koneksi.getKoneksi();
+                String sql = "INSERT INTO buku (id_buku, judul_buku, pengarang, penerbit, tahun, genre, stok) VALUES ('"
+                        +tambahNomor.getText()+"', '"
+                        +tambahNama.getText()+"', '"
+                        +tambahPenulis.getText()+"', '"
+                        +tambahPenerbit.getText()+"', '"
+                        +tambahTahun.getText()+"', '"
+                        +tambahKategori.getText()+"', '"
+                        +0+"')";
+                
+                st = con.createStatement();
+                st.execute(sql);
                 refreshBuku();
                 JOptionPane.showMessageDialog(null, "Data buku berhasil ditambahkan");
-            }else{
-                JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nomor buku sudah ada");
+                tambahNomor.setText("");
+                tambahNama.setText("");
+                tambahPenulis.setText("");
+                tambahPenerbit.setText("");
+                tambahTahun.setText("");
+                tambahKategori.setText("");
+                tambahNomor.requestFocus();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    // validasi number
     private void tambahNomorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tambahNomorKeyTyped
         char enter = evt.getKeyChar();
         if(!(Character.isDigit(enter))){
@@ -574,6 +652,7 @@ public class FBuku extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tambahNomorKeyTyped
 
+    // validasi number
     private void tambahTahunKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tambahTahunKeyTyped
         char enter = evt.getKeyChar();
         if(!(Character.isDigit(enter))){
@@ -581,12 +660,75 @@ public class FBuku extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tambahTahunKeyTyped
 
+    // validasi number
     private void ubahTahunKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ubahTahunKeyTyped
         char enter = evt.getKeyChar();
         if(!(Character.isDigit(enter))){
             evt.consume();
         }
     }//GEN-LAST:event_ubahTahunKeyTyped
+
+    private void ubahStokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ubahStokActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ubahStokActionPerformed
+
+    private void ubahStokKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ubahStokKeyTyped
+        char enter = evt.getKeyChar();
+        if(!(Character.isDigit(enter))){
+            evt.consume();
+        }
+    }//GEN-LAST:event_ubahStokKeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if (ubahNomor.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, silahkan pilih data buku terlebih dahulu");
+            ubahNomor.requestFocus();
+        }else if(ubahNama.getText().equals("")){
+            ubahNama.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, nama harus di isi"); 
+        }else if(ubahPenulis.getText().equals("")){
+            ubahPenulis.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, penulis harus di isi"); 
+        }else if(ubahPenerbit.getText().equals("")){
+            ubahPenerbit.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, penerbit harus di isi"); 
+        }else if(ubahTahun.getText().equals("")){
+            ubahTahun.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, tahun harus di isi"); 
+        }else if(ubahKategori.getText().equals("")){
+            ubahKategori.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, kategori harus di isi"); 
+        }else if(ubahStok.getText().equals("")){
+            ubahStok.requestFocus();
+            JOptionPane.showMessageDialog(null, "Gagal mengubah data, stok harus di isi"); 
+        }else{
+            try{
+                con = Koneksi.getKoneksi();
+                String sql = "UPDATE buku SET judul_buku = '"+ ubahPenulis.getText()
+                                +"', pengarang = '"+ ubahPenulis.getText()
+                                +"', penerbit = '"+ ubahPenerbit.getText()
+                                +"', tahun = '"+ ubahTahun.getText()
+                                +"', genre = '"+ ubahKategori.getText()
+                                +"', stok = '"+ ubahStok.getText()
+                                +"' WHERE buku.id_buku = '"+ ubahNomor.getText()
+                                +"'";
+                
+                st = con.createStatement();
+                st.execute(sql);
+                refreshBuku();
+                JOptionPane.showMessageDialog(null, "Data buku berhasil diubah");
+                ubahNomor.setText("");
+                ubahNama.setText("");
+                ubahPenulis.setText("");
+                ubahPenerbit.setText("");
+                ubahTahun.setText("");
+                ubahKategori.setText("");
+                ubahStok.setText("");
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -633,6 +775,8 @@ public class FBuku extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -657,6 +801,7 @@ public class FBuku extends javax.swing.JFrame {
     private javax.swing.JTextField ubahNomor;
     private javax.swing.JTextField ubahPenerbit;
     private javax.swing.JTextField ubahPenulis;
+    private javax.swing.JTextField ubahStok;
     private javax.swing.JTextField ubahTahun;
     // End of variables declaration//GEN-END:variables
 }

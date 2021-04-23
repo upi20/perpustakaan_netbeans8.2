@@ -53,11 +53,11 @@ public class Data {
     } 
     
     public static boolean insertBuku(String[] newBuku){
-        String[][] newArr = new String[Data.buku.length+1][6];
+        int len = Data.buku.length;
+        String[][] newArr = new String[len+1][6];
         Boolean result = true;
 
-        int len = Data.buku.length;
-        for (int i = 0; i <= len; i++) {
+        for (int i = 0; i < len+1; i++) {
             // menyimpan data ke temp
             for (int j = 0; j < 6; j++) {
                 if(i < len){
@@ -85,8 +85,26 @@ public class Data {
     }
     
       
-    public static boolean deleteBuku(){
+    public static boolean deleteBuku(String no){
         
-        return true;
+        int len = Data.buku.length;
+        String[][] newArr = new String[len][6];
+        Boolean result = false;
+
+        for (int i = 0; i < len-1; i++) {
+            if(Data.buku[i][0].equals(no)){
+                result = true;
+            } else{
+                for (int j = 0; j < 6; j++) {
+                    newArr[i][j] = Data.buku[i][j];
+                }
+            }
+        }
+        
+        if(result){
+            Data.buku = newArr;
+        }
+    
+        return result;
     }
 }
