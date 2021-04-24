@@ -30,7 +30,7 @@ public class FMahasiswa extends javax.swing.JFrame {
         this.setResizable(false);
         refreshBuku();
     }
-    
+
     private void refreshBuku(){
         try{
             con = Koneksi.getKoneksi();
@@ -397,12 +397,12 @@ public class FMahasiswa extends javax.swing.JFrame {
             tambahNPM.requestFocus();
         }else if(tambahNama.getText().equals("")){
             tambahNama.requestFocus();
-            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nama harus di isi"); 
+            JOptionPane.showMessageDialog(null, "Gagal menambahkan data, nama harus di isi");
         }else{
             try{
                 con = Koneksi.getKoneksi();
                 String sql = "INSERT INTO mahasiswa VALUES ('"+tambahNPM.getText()+"', '" +tambahNama.getText()+"', current_timestamp())";
-                
+
                 st = con.createStatement();
                 st.execute(sql);
                 refreshBuku();
@@ -500,7 +500,7 @@ public class FMahasiswa extends javax.swing.JFrame {
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, ex);
-        }        
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -510,7 +510,7 @@ public class FMahasiswa extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

@@ -97,6 +97,11 @@ public class FMenuUtama extends javax.swing.JFrame {
         jLabel2.setText("FORUM UTAMA  PUSTAKAWAN");
 
         jButton3.setText("PEMINJAMAN");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("PENGEMBALIAN");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -193,6 +198,11 @@ public class FMenuUtama extends javax.swing.JFrame {
         new FBuku().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new FPeminjaman().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     
     
