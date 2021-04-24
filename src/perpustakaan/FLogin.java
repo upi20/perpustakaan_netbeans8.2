@@ -9,6 +9,7 @@ import com.mysql.jdbc.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -49,9 +50,9 @@ public class FLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
-        setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(300, 200));
+        setResizable(false);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(300, 200));
         jPanel1.setMinimumSize(new java.awt.Dimension(300, 200));
@@ -147,7 +148,9 @@ public class FLogin extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Login gagal silahkan periksa username dan password anda");
                 }
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+            JFrame jf=new JFrame();
+            jf.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(jf, ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

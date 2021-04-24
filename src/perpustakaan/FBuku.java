@@ -528,8 +528,29 @@ public class FBuku extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // validasi nomor buku yang akan di hapus
         if (!ubahNomor.getText().equals("")) {
-            System.out.println(Data.deleteBuku(ubahNomor.getText()));
-            refreshBuku();
+            int result = JOptionPane.showConfirmDialog(null,"Apakah yakin akan menghapus data ini.", "Hapus data buku",
+               JOptionPane.YES_NO_OPTION,
+               JOptionPane.QUESTION_MESSAGE);
+            if(result == JOptionPane.YES_OPTION){
+                try{
+                    con = Koneksi.getKoneksi();
+                    String sql = "DELETE FROM buku WHERE buku.id_buku = '"+ ubahNomor.getText() +"'";
+                    st = con.createStatement();
+                    st.execute(sql);
+                    refreshBuku();
+                    JOptionPane.showMessageDialog(null, "Data buku berhasil dihapus");
+                    ubahNomor.setText("");
+                    ubahNama.setText("");
+                    ubahPenulis.setText("");
+                    ubahPenerbit.setText("");
+                    ubahTahun.setText("");
+                    ubahKategori.setText("");
+                    ubahStok.setText("");
+                    refreshBuku();
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, e);
+                }
+            }
         }else{
             JOptionPane.showMessageDialog(null, "Gagal menghapus data, nomor pilih buku terlebih dahulu");
         }
@@ -704,7 +725,7 @@ public class FBuku extends javax.swing.JFrame {
         }else{
             try{
                 con = Koneksi.getKoneksi();
-                String sql = "UPDATE buku SET judul_buku = '"+ ubahPenulis.getText()
+                String sql = "UPDATE buku SET judul_buku = '"+ ubahNama.getText()
                                 +"', pengarang = '"+ ubahPenulis.getText()
                                 +"', penerbit = '"+ ubahPenerbit.getText()
                                 +"', tahun = '"+ ubahTahun.getText()
@@ -712,7 +733,7 @@ public class FBuku extends javax.swing.JFrame {
                                 +"', stok = '"+ ubahStok.getText()
                                 +"' WHERE buku.id_buku = '"+ ubahNomor.getText()
                                 +"'";
-                
+                       
                 st = con.createStatement();
                 st.execute(sql);
                 refreshBuku();
