@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,9 @@ public class FPeminjaman extends javax.swing.JFrame {
     String npmPeminjam = "";
     String tanggalPinjam = "";
     String tenggatKembali = "";
+    String[] listPeminjaman = new String[4];
+    String[] listPeminjamanStok = new String[4];
+    int counterTbl = 0;
     
     
     
@@ -286,7 +291,7 @@ public class FPeminjaman extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nomor Buku", "Nama Buku"
+                "Nomor Buku", "Nama Buku", "Stok"
             }
         ));
         bukuPinjam.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -298,6 +303,7 @@ public class FPeminjaman extends javax.swing.JFrame {
         if (bukuPinjam.getColumnModel().getColumnCount() > 0) {
             bukuPinjam.getColumnModel().getColumn(0).setMinWidth(100);
             bukuPinjam.getColumnModel().getColumn(0).setMaxWidth(100);
+            bukuPinjam.getColumnModel().getColumn(2).setMaxWidth(50);
         }
 
         jLabel7.setText("*Untuk menghapus klik terlebih dahulu dan tombolnya dibawah");
@@ -486,6 +492,7 @@ public class FPeminjaman extends javax.swing.JFrame {
             Object[] rows = new Object[3];
             rows[0] = tableBuku.getValueAt(row, 0).toString();
             rows[1] = tableBuku.getValueAt(row, 1).toString();
+            rows[2] = tableBuku.getValueAt(row, 2).toString();
             if(count > 0){
                 for(int i = 0; i<count; i++){
                     if(rows[0].equals(bukuPinjam.getValueAt(i, 0).toString())){
@@ -534,11 +541,14 @@ public class FPeminjaman extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        resetDataBuku();
+    }//GEN-LAST:event_jButton2ActionPerformed
+    private void resetDataBuku(){
         keywordCariBuku.setText("");
         DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
         model.setRowCount(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }
+    
     private void tableMahasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMahasiswaMouseClicked
         int row = tableMahasiswa.rowAtPoint(evt.getPoint());
         LocalDate now = LocalDate.now();
@@ -581,22 +591,29 @@ public class FPeminjaman extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        resetTableMahasiswa();
+    }//GEN-LAST:event_jButton5ActionPerformed
+    private void resetTableMahasiswa(){
         keywordCariMahasiswa.setText("");
         DefaultTableModel model = (DefaultTableModel) tableMahasiswa.getModel();
         model.setRowCount(0);
-    }//GEN-LAST:event_jButton5ActionPerformed
-
+    }
+    
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if(noBukuSelect >= 0){
-            DefaultTableModel model = (DefaultTableModel) bukuPinjam.getModel();
-            model.removeRow(noBukuSelect);
-            pilihanBuku.setText("");
-            noBukuSelect = -1; 
+            resetDataPinjamBuku();
         }else{
             JOptionPane.showMessageDialog(null, "Data yang akan dihapus harus dipilih terlebih dahulu.");
         }
     }//GEN-LAST:event_jButton6ActionPerformed
-
+    
+    private void resetDataPinjamBuku(){
+        DefaultTableModel model = (DefaultTableModel) bukuPinjam.getModel();
+        model.removeRow(noBukuSelect);
+        pilihanBuku.setText("");
+        noBukuSelect = -1;
+    }
+    
     private void bukuPinjamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bukuPinjamMouseClicked
         int row = bukuPinjam.rowAtPoint(evt.getPoint());
         pilihanBuku.setText(bukuPinjam.getValueAt(row,1).toString());
@@ -609,85 +626,58 @@ public class FPeminjaman extends javax.swing.JFrame {
             // cek buku yang dipinjam
             int count= bukuPinjam.getModel().getRowCount();
             if(count > 0){
-//                try{
-//                    con = Koneksi.getKoneksi();
-//                    String sql = "INSERT INTO peminjaman (id, npm, status) VALUES (NULL, '"+npmPeminjam+"', 'Dipinjam')";
-//                    st = con.createStatement();
-//                    st.execute(sql);
-//                }catch(SQLException ex){
-//                    JOptionPane.showMessageDialog(null, ex);
-//                }
+                try{
+                    con = Koneksi.getKoneksi();
+                    String sql = "INSERT INTO peminjaman (id, npm, status) VALUES (NULL, '"+npmPeminjam+"', 'Dipinjam')";
+                    
+                    st = con.createStatement();
+                    st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+                    int autoIncKeyFromApi = -1;
+                    rs = st.getGeneratedKeys();
 
-Statement stmt = null;
-ResultSet rs = null;
+                    if (rs.next()) {
+                        autoIncKeyFromApi = rs.getInt(1);
+                        String pre = "INSERT INTO peminjaman_detail (id, id_peminjaman, npm, id_buku, tanggal_pinjam, tenggat_pinjam, tanggal_kembali, status, denda) VALUES ";
+                        String insert = "";
+                        counterTbl = count;
+                        for (int i = 0; i < count; i++) {
+                            insert += insert.equals("") ? "" : ", ";
+                            insert += "(NULL, '"+autoIncKeyFromApi+"', '"+npmPeminjam+"', '"+bukuPinjam.getValueAt(i,0).toString()+"', '"+tanggalPinjam+"', '"+tenggatKembali+"', NULL, 'Dipinjam', '0')";
+                            listPeminjaman[i] = bukuPinjam.getValueAt(i,0).toString();
+                            listPeminjamanStok[i] = bukuPinjam.getValueAt(i,2).toString();
+                        }
+                              
+                        try{
+                            con = Koneksi.getKoneksi();
+                            st = con.createStatement();
+                            st.execute(pre+insert);
+                            JOptionPane.showMessageDialog(null, "Data peminjaman berhasil ditambahkan");
 
-try {
+                            // reset semua data
+                            resetTableMahasiswa();
+                            resetDataBuku();
+                            resetDataPeminjam();
+                            // hapus tabel buku pinjam
+                            pilihanBuku.setText("");
+                            noBukuSelect = -1;
+                            DefaultTableModel model = (DefaultTableModel) bukuPinjam.getModel();
+                            model.setRowCount(0);
+                        }catch(SQLException e){
+                            JOptionPane.showMessageDialog(null, e);
+                        }
+                    } else {
 
-    //
-    // Create a Statement instance that we can use for
-    // 'normal' result sets assuming you have a
-    // Connection 'conn' to a MySQL database already
-    // available
+                        // throw an exception from here
+                    }
 
-    stmt = con.createStatement();
-
-    //
-    // Issue the DDL queries for the table for this example
-    //
-
-    stmt.executeUpdate("DROP TABLE IF EXISTS autoIncTutorial");
-    stmt.executeUpdate(
-            "CREATE TABLE autoIncTutorial ("
-            + "priKey INT NOT NULL AUTO_INCREMENT, "
-            + "dataField VARCHAR(64), PRIMARY KEY (priKey))");
-
-    //
-    // Insert one row that will generate an AUTO INCREMENT
-    // key in the 'priKey' field
-    //
-
-    stmt.executeUpdate(
-            "INSERT INTO autoIncTutorial (dataField) "
-            + "values ('Can I Get the Auto Increment Field?')",
-            Statement.RETURN_GENERATED_KEYS);
-
-    //
-    // Example of using Statement.getGeneratedKeys()
-    // to retrieve the value of an auto-increment
-    // value
-    //
-
-    int autoIncKeyFromApi = -1;
-
-    rs = stmt.getGeneratedKeys();
-
-    if (rs.next()) {
-        autoIncKeyFromApi = rs.getInt(1);
-    } else {
-
-        // throw an exception from here
-    }
-
-    System.out.println("Key returned from getGeneratedKeys():"
-        + autoIncKeyFromApi);
-} finally {
-
-    if (rs != null) {
-        try {
-            rs.close();
-        } catch (SQLException ex) {
-            // ignore
-        }
-    }
-
-    if (stmt != null) {
-        try {
-            stmt.close();
-        } catch (SQLException ex) {
-            // ignore
-        }
-    }
-}
+//                    System.out.println("Key returned from getGeneratedKeys():" + autoIncKeyFromApi);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FPeminjaman.class.getName()).log(Level.SEVERE, null, ex);
+                }finally{
+                    for (int i = 0; i < counterTbl; i++) {
+                        kurangiStokExe(listPeminjamanStok[i],listPeminjaman[i]);
+                    }
+                }
             }else{
                 JOptionPane.showMessageDialog(null, "Buku belum dipilih");
             }
@@ -695,10 +685,26 @@ try {
             JOptionPane.showMessageDialog(null, "Peminjam belum dipilih");
         }
         
-        // cek buku
     }//GEN-LAST:event_jButton8ActionPerformed
 
+
+    private void kurangiStokExe(String stok, String nomor){
+        try{
+            int stok1 = Integer.parseInt(stok);
+            String sql1 = "UPDATE buku SET stok = '"+ --stok1 +"' WHERE id_buku = '"+nomor+"'";
+            con = Koneksi.getKoneksi();
+            st = con.createStatement();
+            st.execute(sql1);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }    
+    
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        resetDataPeminjam();
+    }//GEN-LAST:event_jButton7ActionPerformed
+    
+    private void resetDataPeminjam(){
         npmPeminjam = "";
         tanggalPinjam = "";
         tenggatKembali = "";
@@ -707,8 +713,8 @@ try {
         dpNama.setText(":");
         dpTanggalPinjam.setText(":");
         dpTenggatPinjam.setText(":");
-    }//GEN-LAST:event_jButton7ActionPerformed
-
+    }
+    
     /**
      * @param args the command line arguments
      */
