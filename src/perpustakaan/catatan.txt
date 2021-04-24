@@ -1,0 +1,10 @@
+1. Perbaikan nomor buku semua tabel
+2. fungsi tambah peminjaman
+    - reset data peminjam //
+    - tombol hapus batas buku yang akan dipinjam//
+    - limit buku yang akan dipinjam//
+    - fungsi simpan
+    - tambah tabel penyimpanan detail.//
+    - status buku di masing masing ada
+        - tabel peminjaman status ada 3: pinjam, pinjam separuh, dibalikan separuh
+        - tabel peminjaman_detail status 

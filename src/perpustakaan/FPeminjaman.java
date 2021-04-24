@@ -5,17 +5,40 @@
  */
 package perpustakaan;
 
+import com.mysql.jdbc.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Isepl
  */
 public class FPeminjaman extends javax.swing.JFrame {
-
+    Connection con;
+    Statement st;
+    ResultSet rs;
+    
+    // temp
+    String npmPeminjam = "";
+    String tanggalPinjam = "";
+    String tenggatKembali = "";
+    
+    
+    
+    int noBukuSelect = -1;
     /**
      * Creates new form FPeminjaman
      */
     public FPeminjaman() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setResizable(false);
+//        pilihanBuku.setText("Testing");
     }
 
     /**
@@ -27,32 +50,61 @@ public class FPeminjaman extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tableMahasiswa = new javax.swing.JTable();
+        keywordCariMahasiswa = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableBuku = new javax.swing.JTable();
+        keywordCariBuku = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        bukuPinjam = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        pilihanBuku = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        dpTenggatPinjam = new javax.swing.JLabel();
+        dpTanggalPinjam = new javax.swing.JLabel();
+        dpNama = new javax.swing.JLabel();
+        dpNPM = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
-        jLabel2.setText("Mahasiswa");
+        jLabel17.setText("jLabel17");
 
-        jLabel3.setText("Buku");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("FORM PEMINJAMAN BUKU");
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Form Peminjaman Buku");
@@ -64,8 +116,313 @@ public class FPeminjaman extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jLabel4.setText("*Klik untuk memilih");
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Mahasiswa"));
+
+        tableMahasiswa.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "NPM", "Nama", "Tanggal Bergabung"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableMahasiswa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMahasiswaMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tableMahasiswa);
+        if (tableMahasiswa.getColumnModel().getColumnCount() > 0) {
+            tableMahasiswa.getColumnModel().getColumn(0).setMinWidth(90);
+            tableMahasiswa.getColumnModel().getColumn(0).setMaxWidth(170);
+        }
+
+        keywordCariMahasiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                keywordCariMahasiswaActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Reset");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Cari");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("*Klik untuk memilih");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(keywordCariMahasiswa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel5)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(keywordCariMahasiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Cari Buku"));
+
+        tableBuku.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nomor Buku", "Nama", "Stok"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableBuku.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableBukuMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableBuku);
+        if (tableBuku.getColumnModel().getColumnCount() > 0) {
+            tableBuku.getColumnModel().getColumn(0).setMinWidth(100);
+            tableBuku.getColumnModel().getColumn(0).setMaxWidth(100);
+        }
+
+        keywordCariBuku.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                keywordCariBukuActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Cari");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Reset");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("*Klik untuk memilih");
+
+        jLabel9.setText("*Stok yang kosong tidak akan muncul");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(keywordCariBuku)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel9))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(keywordCariBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Daftar buku yang akan dipinjam"));
+        jPanel4.setToolTipText("");
+
+        bukuPinjam.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nomor Buku", "Nama Buku"
+            }
+        ));
+        bukuPinjam.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bukuPinjamMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(bukuPinjam);
+        if (bukuPinjam.getColumnModel().getColumnCount() > 0) {
+            bukuPinjam.getColumnModel().getColumn(0).setMinWidth(100);
+            bukuPinjam.getColumnModel().getColumn(0).setMaxWidth(100);
+        }
+
+        jLabel7.setText("*Untuk menghapus klik terlebih dahulu dan tombolnya dibawah");
+
+        jLabel8.setText("Pilihan: ");
+
+        jButton6.setText("Hapus");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("*Batas peminjaman buku maksimal 3");
+
+        pilihanBuku.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pilihanBuku)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton6))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel10)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(pilihanBuku)))
+                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING)))
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Data Peminjam"));
+
+        jLabel11.setText("NPM");
+
+        jLabel12.setText("Nama");
+
+        jLabel13.setText("Tanggal Pinjam");
+
+        jLabel14.setText("Tenggat Pinjam");
+
+        dpTenggatPinjam.setText(":");
+
+        dpTanggalPinjam.setText(":");
+
+        dpNama.setText(":");
+
+        dpNPM.setText(":");
+
+        jButton7.setText("Reset");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dpNPM)
+                    .addComponent(dpNama)
+                    .addComponent(dpTanggalPinjam)
+                    .addComponent(dpTenggatPinjam))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton7))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(dpNPM))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(dpNama))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(dpTanggalPinjam))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(dpTenggatPinjam))
+                .addGap(18, 18, 18)
+                .addComponent(jButton7))
+        );
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton8.setText("SIMPAN PEMINJAMAN");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,17 +431,17 @@ public class FPeminjaman extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(0, 579, Short.MAX_VALUE)))
+                            .addComponent(jLabel1)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,20 +449,26 @@ public class FPeminjaman extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(31, 31, 31)
-                .addComponent(jLabel3)
-                .addContainerGap(554, Short.MAX_VALUE))
+                .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -113,6 +476,238 @@ public class FPeminjaman extends javax.swing.JFrame {
         pustakawan.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tableBukuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBukuMouseClicked
+        boolean cek = true;
+        int count= bukuPinjam.getModel().getRowCount();
+        if (count <= 2){
+            int row = tableBuku.rowAtPoint(evt.getPoint());     
+            DefaultTableModel model = (DefaultTableModel) bukuPinjam.getModel();
+            Object[] rows = new Object[3];
+            rows[0] = tableBuku.getValueAt(row, 0).toString();
+            rows[1] = tableBuku.getValueAt(row, 1).toString();
+            if(count > 0){
+                for(int i = 0; i<count; i++){
+                    if(rows[0].equals(bukuPinjam.getValueAt(i, 0).toString())){
+                        cek = false;
+                    }
+                }   
+            }
+            if(cek){
+                model.addRow(rows);
+            } else{
+                JOptionPane.showMessageDialog(null, "Buku sudah ada");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Peminjaman buku maksimal 3");
+        }
+    }//GEN-LAST:event_tableBukuMouseClicked
+
+    private void keywordCariBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keywordCariBukuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_keywordCariBukuActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try{
+            con = Koneksi.getKoneksi();
+            String sql1 = "SELECT * FROM buku WHERE ((judul_buku LIKE '%"
+            +keywordCariBuku.getText()+"%') or (pengarang LIKE '%"
+            +keywordCariBuku.getText()+"%') or (penerbit LIKE '%"
+            +keywordCariBuku.getText()+"%') or (tahun LIKE '%"
+            +keywordCariBuku.getText()+"%') or (genre LIKE '%"
+            +keywordCariBuku.getText()+"%')) and (stok > 0)  LIMIT 10";
+            st = con.createStatement();
+            rs = st.executeQuery(sql1);
+            DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
+            model.setRowCount(0);
+            while(rs.next()){
+                Object[] row = new Object[7];
+                row[0] = rs.getString("id_buku");
+                row[1] = rs.getString("judul_buku");
+                row[2] = rs.getString("stok");
+
+                model.addRow(row);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        keywordCariBuku.setText("");
+        DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
+        model.setRowCount(0);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tableMahasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMahasiswaMouseClicked
+        int row = tableMahasiswa.rowAtPoint(evt.getPoint());
+        LocalDate now = LocalDate.now();
+        String pinjam = now.toString();
+        String tenggat = now.plusDays(14).toString();
+       
+        dpNPM.setText(": "+tableMahasiswa.getValueAt(row,0).toString());
+        dpNama.setText(": "+tableMahasiswa.getValueAt(row,1).toString());
+        dpTanggalPinjam.setText(": "+pinjam);
+        dpTenggatPinjam.setText(": "+tenggat);
+
+
+        npmPeminjam = tableMahasiswa.getValueAt(row,0).toString();
+        tanggalPinjam = pinjam;
+        tenggatKembali = tenggat;
+    }//GEN-LAST:event_tableMahasiswaMouseClicked
+
+    private void keywordCariMahasiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keywordCariMahasiswaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_keywordCariMahasiswaActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try{
+            con = Koneksi.getKoneksi();
+            String sql1 = "SELECT * FROM mahasiswa WHERE (nama LIKE '%"+keywordCariMahasiswa.getText()+"%') or (npm LIKE '%"+keywordCariMahasiswa.getText()+"%') LIMIT 10";
+            st = con.createStatement();
+            rs = st.executeQuery(sql1);
+            DefaultTableModel model = (DefaultTableModel) tableMahasiswa.getModel();
+            model.setRowCount(0);
+            while(rs.next()){
+                Object[] row = new Object[13];
+                row[0] = rs.getString("npm");
+                row[1] = rs.getString("nama");
+                row[2] = rs.getString("tanggal_bergabung");
+                model.addRow(row);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        keywordCariMahasiswa.setText("");
+        DefaultTableModel model = (DefaultTableModel) tableMahasiswa.getModel();
+        model.setRowCount(0);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(noBukuSelect >= 0){
+            DefaultTableModel model = (DefaultTableModel) bukuPinjam.getModel();
+            model.removeRow(noBukuSelect);
+            pilihanBuku.setText("");
+            noBukuSelect = -1; 
+        }else{
+            JOptionPane.showMessageDialog(null, "Data yang akan dihapus harus dipilih terlebih dahulu.");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void bukuPinjamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bukuPinjamMouseClicked
+        int row = bukuPinjam.rowAtPoint(evt.getPoint());
+        pilihanBuku.setText(bukuPinjam.getValueAt(row,1).toString());
+        noBukuSelect = row;
+    }//GEN-LAST:event_bukuPinjamMouseClicked
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // cek peminjam
+        if (!npmPeminjam.equals("")) {
+            // cek buku yang dipinjam
+            int count= bukuPinjam.getModel().getRowCount();
+            if(count > 0){
+//                try{
+//                    con = Koneksi.getKoneksi();
+//                    String sql = "INSERT INTO peminjaman (id, npm, status) VALUES (NULL, '"+npmPeminjam+"', 'Dipinjam')";
+//                    st = con.createStatement();
+//                    st.execute(sql);
+//                }catch(SQLException ex){
+//                    JOptionPane.showMessageDialog(null, ex);
+//                }
+
+Statement stmt = null;
+ResultSet rs = null;
+
+try {
+
+    //
+    // Create a Statement instance that we can use for
+    // 'normal' result sets assuming you have a
+    // Connection 'conn' to a MySQL database already
+    // available
+
+    stmt = con.createStatement();
+
+    //
+    // Issue the DDL queries for the table for this example
+    //
+
+    stmt.executeUpdate("DROP TABLE IF EXISTS autoIncTutorial");
+    stmt.executeUpdate(
+            "CREATE TABLE autoIncTutorial ("
+            + "priKey INT NOT NULL AUTO_INCREMENT, "
+            + "dataField VARCHAR(64), PRIMARY KEY (priKey))");
+
+    //
+    // Insert one row that will generate an AUTO INCREMENT
+    // key in the 'priKey' field
+    //
+
+    stmt.executeUpdate(
+            "INSERT INTO autoIncTutorial (dataField) "
+            + "values ('Can I Get the Auto Increment Field?')",
+            Statement.RETURN_GENERATED_KEYS);
+
+    //
+    // Example of using Statement.getGeneratedKeys()
+    // to retrieve the value of an auto-increment
+    // value
+    //
+
+    int autoIncKeyFromApi = -1;
+
+    rs = stmt.getGeneratedKeys();
+
+    if (rs.next()) {
+        autoIncKeyFromApi = rs.getInt(1);
+    } else {
+
+        // throw an exception from here
+    }
+
+    System.out.println("Key returned from getGeneratedKeys():"
+        + autoIncKeyFromApi);
+} finally {
+
+    if (rs != null) {
+        try {
+            rs.close();
+        } catch (SQLException ex) {
+            // ignore
+        }
+    }
+
+    if (stmt != null) {
+        try {
+            stmt.close();
+        } catch (SQLException ex) {
+            // ignore
+        }
+    }
+}
+            }else{
+                JOptionPane.showMessageDialog(null, "Buku belum dipilih");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Peminjam belum dipilih");
+        }
+        
+        // cek buku
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        npmPeminjam = "";
+        tanggalPinjam = "";
+        tenggatKembali = "";
+        
+        dpNPM.setText(":");
+        dpNama.setText(":");
+        dpTanggalPinjam.setText(":");
+        dpTenggatPinjam.setText(":");
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,12 +745,43 @@ public class FPeminjaman extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable bukuPinjam;
+    private javax.swing.JLabel dpNPM;
+    private javax.swing.JLabel dpNama;
+    private javax.swing.JLabel dpTanggalPinjam;
+    private javax.swing.JLabel dpTenggatPinjam;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField keywordCariBuku;
+    private javax.swing.JTextField keywordCariMahasiswa;
+    private javax.swing.JLabel pilihanBuku;
+    private javax.swing.JTable tableBuku;
+    private javax.swing.JTable tableMahasiswa;
     // End of variables declaration//GEN-END:variables
 }

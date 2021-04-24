@@ -34,7 +34,7 @@ public class FMahasiswa extends javax.swing.JFrame {
     private void refreshBuku(){
         try{
             con = Koneksi.getKoneksi();
-            String sql1 = "SELECT * FROM mahasiswa";
+            String sql1 = "SELECT * FROM mahasiswa order by npm desc LIMIT 30";
             st = con.createStatement();
             rs = st.executeQuery(sql1);
             DefaultTableModel model = (DefaultTableModel) tableMahasiswa.getModel();
@@ -97,10 +97,7 @@ public class FMahasiswa extends javax.swing.JFrame {
 
         tableMahasiswa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "NPM", "Nama", "Tanggal Bergabung"
@@ -486,7 +483,7 @@ public class FMahasiswa extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try{
             con = Koneksi.getKoneksi();
-            String sql1 = "SELECT * FROM mahasiswa WHERE (nama LIKE '%"+keywordCari.getText()+"%') or (npm LIKE '%"+keywordCari.getText()+"%')";
+            String sql1 = "SELECT * FROM mahasiswa WHERE (nama LIKE '%"+keywordCari.getText()+"%') or (npm LIKE '%"+keywordCari.getText()+"%') LIMIT 30";
             st = con.createStatement();
             rs = st.executeQuery(sql1);
             DefaultTableModel model = (DefaultTableModel) tableMahasiswa.getModel();

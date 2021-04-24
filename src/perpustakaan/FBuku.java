@@ -34,7 +34,7 @@ public class FBuku extends javax.swing.JFrame {
     private void refreshBuku(){
         try{
             con = Koneksi.getKoneksi();
-            String sql1 = "SELECT * FROM buku order by id_buku ASC";
+            String sql1 = "SELECT * FROM buku order by id_buku DESC LIMIT 30";
             st = con.createStatement();
             rs = st.executeQuery(sql1);
             DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
@@ -120,13 +120,10 @@ public class FBuku extends javax.swing.JFrame {
 
         tableBuku.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Nomor", "Nama", "Penulis", "Penerbit", "Tahun", "Kategori", "Stok"
+                "Nomor Buku", "Nama", "Penulis", "Penerbit", "Tahun", "Kategori", "Stok"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -172,7 +169,7 @@ public class FBuku extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Nomor");
+        jLabel1.setText("Nomor Buku");
 
         jLabel3.setText("Nama");
 
@@ -304,7 +301,7 @@ public class FBuku extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setText("Nomor");
+        jLabel8.setText("Nomor Buku");
 
         jLabel9.setText("Nama");
 
@@ -380,7 +377,7 @@ public class FBuku extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 215, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
                         .addComponent(jButton6)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -792,11 +789,11 @@ public class FBuku extends javax.swing.JFrame {
             con = Koneksi.getKoneksi();
             String sql1 = "SELECT * FROM buku WHERE (judul_buku LIKE '%"
                     +keywordCari.getText()+"%') or (pengarang LIKE '%"
+                    +keywordCari.getText()+"%') or (id_buku LIKE '%"
                     +keywordCari.getText()+"%') or (penerbit LIKE '%"
                     +keywordCari.getText()+"%') or (tahun LIKE '%"
                     +keywordCari.getText()+"%') or (genre LIKE '%"
-                    +keywordCari.getText()+"%')";
-            System.out.println(sql1);
+                    +keywordCari.getText()+"%') LIMIT 30";
             st = con.createStatement();
             rs = st.executeQuery(sql1);
             DefaultTableModel model = (DefaultTableModel) tableBuku.getModel();
