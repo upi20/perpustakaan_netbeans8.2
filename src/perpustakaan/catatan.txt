@@ -1,10 +1,24 @@
-1. Perbaikan nomor buku semua tabel
-2. fungsi tambah peminjaman
-    - reset data peminjam //
-    - tombol hapus batas buku yang akan dipinjam//
-    - limit buku yang akan dipinjam//
-    - fungsi simpan
-    - tambah tabel penyimpanan detail.//
-    - status buku di masing masing ada
-        - tabel peminjaman status ada 3: pinjam, pinjam separuh, dibalikan separuh
-        - tabel peminjaman_detail status 
+1. Buat tampilan
+    Tabel pencarian ke detail peminjaman like npm, id_buku dan id pinjam_detail where statud Dipinjam
+      
+query ubah status peminjaman "UPDATE peminjaman as a SET a.status = if((select count(*) from peminjaman_detail as b where b.id_peminjaman = a.id and b.status='Dipinjam') < 1 , 'Dikembalikan','Dikembalikan Separuh') WHERE a.id = 43;"
+
+queri cari
+"
+SELECT * 
+FROM peminjaman_detail as a
+LEFT JOIN peminjaman as b ON a.id_peminjaman = b.id
+LEFT JOIN buku as c ON a.id_buku = c.id_buku
+LEFT JOIN mahasiswa as d ON b.npm = d.npm
+WHERE 
+(a.status = 'Dipinjam') 
+and
+(
+	(a.npm LIKE '%a%') OR
+    (a.id_buku LIKE '%a%') OR
+    (c.judul_buku LIKE '%a%') OR
+    (c.pengarang LIKE '%a%') OR
+    (c.penerbit LIKE '%a%') OR
+    (d.nama LIKE '%a%') 
+)
+"
