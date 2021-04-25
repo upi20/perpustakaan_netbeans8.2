@@ -5,7 +5,7 @@ query ubah status peminjaman "UPDATE peminjaman as a SET a.status = if((select c
 
 queri cari
 "
-SELECT * 
+SELECT a.id as id_peminjaman_detail, b.id as id_peminjaman, d.nama, d.npm, c.judul_buku, a.tenggat_pinjam
 FROM peminjaman_detail as a
 LEFT JOIN peminjaman as b ON a.id_peminjaman = b.id
 LEFT JOIN buku as c ON a.id_buku = c.id_buku
@@ -14,7 +14,7 @@ WHERE
 (a.status = 'Dipinjam') 
 and
 (
-	(a.npm LIKE '%a%') OR
+    (a.npm LIKE '%a%') OR
     (a.id_buku LIKE '%a%') OR
     (c.judul_buku LIKE '%a%') OR
     (c.pengarang LIKE '%a%') OR
@@ -22,3 +22,10 @@ and
     (d.nama LIKE '%a%') 
 )
 "
+
+id peminjaman detail
+id peminjaman
+nama mahasiswa
+npm
+nama buku
+tanggal tenggat
