@@ -23,6 +23,8 @@ and
 )
 "
 
+ubah stok | UPDATE buku SET stok = '"++"' WHERE id_buku = '"++"'
+
 id peminjaman detail
 id peminjaman
 nama mahasiswa

@@ -31,9 +31,10 @@ public class FPengembalian extends javax.swing.JFrame {
     String[] npm = new String[11];
     String[] nama = new String[11];
     String[] tenggat_pinjam = new String[11];
+    int[] stok = new int[11];
    
     int[] denda = new int[11];
-    int index = 0 ;
+    int index = -1 ;
     /**
      * Creates new form FPengembalian
      */
@@ -105,6 +106,11 @@ public class FPengembalian extends javax.swing.JFrame {
         });
 
         jButton3.setText("Reset");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         tblHasilCari.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -272,6 +278,11 @@ public class FPengembalian extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton4.setText("Simpan Pengembalian");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -320,7 +331,7 @@ public class FPengembalian extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String keyw = tfKeyword.getText();
-        String sql = "SELECT a.id as id_peminjaman_detail, b.id as id_peminjaman, d.nama, d.npm, c.judul_buku, a.tenggat_pinjam, c.id_buku " +
+        String sql = "SELECT a.id as id_peminjaman_detail, b.id as id_peminjaman, d.nama, d.npm, c.judul_buku, a.tenggat_pinjam, c.id_buku, c.stok " +
                     "FROM peminjaman_detail as a " +
                     "LEFT JOIN peminjaman as b ON a.id_peminjaman = b.id " +
                     "LEFT JOIN buku as c ON a.id_buku = c.id_buku " +
@@ -358,6 +369,7 @@ public class FPengembalian extends javax.swing.JFrame {
                 npm[i] = rs.getString("npm");
                 tenggat_pinjam[i] = rs.getString("tenggat_pinjam");
                 judul_buku[i] = rs.getString("judul_buku");
+                stok[i] = rs.getInt("stok");
                 denda[i] = hitungTenggat(rs.getString("tenggat_pinjam")) * 1000;
                 i++;
             }
@@ -371,6 +383,72 @@ public class FPengembalian extends javax.swing.JFrame {
         cariIndex((String) tblHasilCari.getValueAt(row,0));
         
     }//GEN-LAST:event_tblHasilCariMouseClicked
+
+    // simpan pengembalian
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if(index >= 0){
+            try{
+                // update peminjaman detail
+                String sql1 = "UPDATE peminjaman_detail SET tanggal_kembali = '"+
+                        LocalDate.now()+"', status = 'Dikembalikan', denda = '"+
+                        denda[index]+"' WHERE id = '"+
+                        id_peminjaman_detail[index]+"'";
+                con = Koneksi.getKoneksi();
+                st = con.createStatement();
+                st.execute(sql1);
+                
+                // update peminjaman
+                try{
+                    String sql2 = "UPDATE peminjaman as a SET a.status = if((select count(*) from peminjaman_detail as b where b.id_peminjaman = a.id and b.status='Dipinjam') < 1 , 'Dikembalikan','Dikembalikan Separuh') WHERE a.id = "+id_peminjaman[index];
+                    con = Koneksi.getKoneksi();
+                    st = con.createStatement();
+                    st.execute(sql2);
+                }catch(SQLException ex){
+                    JOptionPane.showMessageDialog(null, ex);
+                }finally{
+                    // update stok
+                    try{
+                        String sql3 = "UPDATE buku SET stok = '"+ ++stok[index] +"' WHERE id_buku = '"+id_buku[index]+"'";
+                        con = Koneksi.getKoneksi();
+                        st = con.createStatement();
+                        st.execute(sql3);
+                    }catch(SQLException ex){
+                        JOptionPane.showMessageDialog(null, ex);
+                    }
+                }
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex);
+            }finally{
+                JOptionPane.showMessageDialog(null, "Berhasil. Data pengembalian berhasil disimpan");
+                resetAll();
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Gagal. Data pengembalian belum dipilih");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    // reset
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        resetAll();
+    }//GEN-LAST:event_jButton3ActionPerformed
+    
+    // reset exe
+    private void resetAll(){
+        tfKeyword.setText("");
+        DefaultTableModel model = (DefaultTableModel) tblHasilCari.getModel();
+        model.setRowCount(0);
+        lbDenda.setText("");
+        lbJudulBuku.setText(":");
+        lbNama.setText(":");
+        lbNoPemBuk.setText(":");
+        lbNoPem.setText(":");
+        lbNoPem.setText(":");
+        lbJudulBuku.setText(":");
+        lbTenggat.setText(":");
+        lbNoBuku.setText(":");
+        lbNpm.setText(":");
+        index = -1;
+    }
     
     private void cariIndex(String no_pinjam){
         for (int i = 0; i < id_peminjaman_detail.length; i++) {
@@ -399,6 +477,7 @@ public class FPengembalian extends javax.swing.JFrame {
         }
     }
     
+    // hitung denda
     private int hitungTenggat(String tanggal){
         // tanggal 1
         // dibuat ke localedate
