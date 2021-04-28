@@ -5,18 +5,25 @@
  */
 package perpustakaan;
 
+import com.mysql.jdbc.Connection;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Isepl
  */
 public class FMenuUtama extends javax.swing.JFrame {
-
+    Connection con;
+    Statement st;
+    ResultSet rs;
     /**
      * Creates new form FUtamaPustakawan
      */
@@ -26,8 +33,9 @@ public class FMenuUtama extends javax.swing.JFrame {
         this.setLayout(new GridBagLayout());
         this.add(mainPanel, new GridBagConstraints());
         this.setSize(new Dimension(800, 600));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        refreshKilasan();
     }
 
     /**
@@ -54,9 +62,9 @@ public class FMenuUtama extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lbKl1 = new javax.swing.JLabel();
+        lbKl2 = new javax.swing.JLabel();
+        lbKl3 = new javax.swing.JLabel();
 
         jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         jFrame1.setTitle("FORUM UTAMA KEPALA PUSTAKAWAN");
@@ -103,6 +111,11 @@ public class FMenuUtama extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FORM UTAMA PUSTAKAWAN");
         setMinimumSize(new java.awt.Dimension(540, 400));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         mainPanel.setMinimumSize(new java.awt.Dimension(350, 350));
@@ -114,11 +127,21 @@ public class FMenuUtama extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jButton2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton2KeyPressed(evt);
+            }
+        });
 
         jButton3.setText("PEMINJAMAN");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
+            }
+        });
+        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton3KeyPressed(evt);
             }
         });
 
@@ -128,6 +151,11 @@ public class FMenuUtama extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        jButton4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton4KeyPressed(evt);
+            }
+        });
 
         jButton5.setText("DATA MAHASISWA");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -135,11 +163,21 @@ public class FMenuUtama extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+        jButton5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton5KeyPressed(evt);
+            }
+        });
 
         jButton6.setText("DATA BUKU");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
+            }
+        });
+        jButton6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton6KeyPressed(evt);
             }
         });
 
@@ -154,14 +192,14 @@ public class FMenuUtama extends javax.swing.JFrame {
 
         jLabel5.setText("Jumlah total buku");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel6.setText("0");
+        lbKl1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbKl1.setText("0");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel7.setText("0");
+        lbKl2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbKl2.setText("0");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel8.setText("0");
+        lbKl3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbKl3.setText("0");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -173,9 +211,9 @@ public class FMenuUtama extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
+                    .addComponent(lbKl1)
+                    .addComponent(lbKl2)
+                    .addComponent(lbKl3))
                 .addContainerGap(127, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -184,15 +222,15 @@ public class FMenuUtama extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(1, 1, 1)
-                .addComponent(jLabel6)
+                .addComponent(lbKl1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addGap(3, 3, 3)
-                .addComponent(jLabel7)
+                .addComponent(lbKl2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addComponent(lbKl3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -285,10 +323,79 @@ public class FMenuUtama extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    public JPanel getPanel(){
-        return this.mainPanel;
-    }
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosed
+
+    private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+           
+        }
+    }//GEN-LAST:event_jButton2KeyPressed
+
+    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+           
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3KeyPressed
+
+    private void jButton4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton4KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+           
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4KeyPressed
+
+    private void jButton5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton5KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+           
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5KeyPressed
+
+    private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6KeyPressed
+
     
+    private void refreshKilasan(){
+        // jumlah buku yang ada
+        try{
+            String sql1 = "SELECT sum(stok) as jml_buku FROM buku";
+            con = Koneksi.getKoneksi();
+            st = con.createStatement();
+            rs = st.executeQuery(sql1);
+            if(rs.next()){
+                lbKl1.setText(rs.getString("jml_buku"));
+            }
+            
+            // jumlah buku yang dipinjam
+            try{
+                String sql2 = "SELECT count(*) as jml_buku FROM peminjaman_detail WHERE status = 'Dipinjam'";
+                con = Koneksi.getKoneksi();
+                st = con.createStatement();
+                rs = st.executeQuery(sql2);
+                if(rs.next()){
+                    lbKl2.setText(rs.getString("jml_buku"));
+                }
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, ex);
+        }finally{
+            // jumlah total buku
+            try{
+                String sql2 = "SELECT ((sum(stok))+ (SELECT count(*) FROM peminjaman_detail WHERE status = 'Dipinjam')) as jml_buku FROM buku";
+                con = Koneksi.getKoneksi();
+                st = con.createStatement();
+                rs = st.executeQuery(sql2);
+                if(rs.next()){
+                    lbKl3.setText(rs.getString("jml_buku"));
+                }
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -339,11 +446,11 @@ public class FMenuUtama extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lbKl1;
+    private javax.swing.JLabel lbKl2;
+    private javax.swing.JLabel lbKl3;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
 }

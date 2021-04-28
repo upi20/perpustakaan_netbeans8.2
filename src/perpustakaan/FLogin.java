@@ -6,7 +6,6 @@
 package perpustakaan;
 
 import com.mysql.jdbc.Connection;
-import java.awt.Color;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +13,7 @@ import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 /**
  *
@@ -32,8 +32,8 @@ public class FLogin extends javax.swing.JFrame {
         this.setLayout(new GridBagLayout());
         this.add(mainPanel, new GridBagConstraints());
         this.setSize(new Dimension(800, 600));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -60,7 +60,7 @@ public class FLogin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new java.awt.Dimension(300, 200));
+        setMinimumSize(new java.awt.Dimension(320, 250));
         setPreferredSize(new java.awt.Dimension(1020, 720));
 
         mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -81,12 +81,22 @@ public class FLogin extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton2.setText("Keluar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+        jButton2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton2KeyPressed(evt);
             }
         });
 
@@ -159,6 +169,10 @@ public class FLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        btnLogin();
+    }//GEN-LAST:event_jButton1ActionPerformed
+        
+    private void btnLogin(){
         try{
             String pass = new String(password.getPassword());
             con = Koneksi.getKoneksi();
@@ -167,9 +181,6 @@ public class FLogin extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(sql);
             if(rs.next()){
                 if(username.getText().equals(rs.getString("username")) && pass.equals(rs.getString("password"))){
-//                    JFrame utama = new FMenuUtama();
-//                   
-//                    this.mainPanel = utama.ma();
                 new FMenuUtama().setVisible(true);
                 dispose();
                 }
@@ -181,11 +192,20 @@ public class FLogin extends javax.swing.JFrame {
             jf.setAlwaysOnTop(true);
             JOptionPane.showMessageDialog(jf, ex.getMessage());
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.exit(0);        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnLogin();
+        }
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
+        System.exit(0);
+    }//GEN-LAST:event_jButton2KeyPressed
 
     /**
      * @param args the command line arguments

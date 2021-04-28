@@ -34,8 +34,8 @@ public class FBuku extends javax.swing.JFrame {
         this.setLayout(new GridBagLayout());
         this.add(mainPanel, new GridBagConstraints());
         this.setSize(new Dimension(1120, 750));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
     
     private void refreshBuku(){
