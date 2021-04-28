@@ -35,6 +35,7 @@ public class FPengembalian extends javax.swing.JFrame {
     String[] npm = new String[11];
     String[] nama = new String[11];
     String[] tenggat_pinjam = new String[11];
+    String[] tanggal_pinjam = new String[11];
     int[] stok = new int[11];
    
     int[] denda = new int[11];
@@ -44,10 +45,10 @@ public class FPengembalian extends javax.swing.JFrame {
      */
     public FPengembalian() {
         initComponents();
-        mainPanel.setPreferredSize(new Dimension(600, 550));
+        mainPanel.setPreferredSize(new Dimension(600, 580));
         this.setLayout(new GridBagLayout());
         this.add(mainPanel, new GridBagConstraints());
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(800, 630));
         this.setVisible(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -90,6 +91,9 @@ public class FPengembalian extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         lbTenggat = new javax.swing.JLabel();
         lbDenda = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        lbTanggalPeminjaman = new javax.swing.JLabel();
+        lbDenda1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -224,6 +228,12 @@ public class FPengembalian extends javax.swing.JFrame {
 
         lbTenggat.setText(":");
 
+        jLabel12.setText("Tanggal peminjaman");
+
+        lbTanggalPeminjaman.setText(":");
+
+        lbDenda1.setText("Rp. 0");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -231,65 +241,79 @@ public class FPengembalian extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
                     .addComponent(jLabel2)
+                    .addComponent(jLabel12)
                     .addComponent(jLabel3)
+                    .addComponent(jLabel8)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel9))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbNoBuku)
                     .addComponent(lbJudulBuku)
-                    .addComponent(lbTenggat)
                     .addComponent(lbNoPem)
+                    .addComponent(lbNoPemBuk)
+                    .addComponent(lbNpm)
+                    .addComponent(lbTanggalPeminjaman)
+                    .addComponent(lbNama)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lbDenda2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbDenda))
-                    .addComponent(lbNoPemBuk)
-                    .addComponent(lbNpm)
-                    .addComponent(lbNama))
+                        .addComponent(lbDenda1))
+                    .addComponent(lbTenggat)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lbDenda)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(lbNoPem)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNoPemBuk)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNpm)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNama)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNoBuku)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbJudulBuku)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbTenggat)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbNoPem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbNoPemBuk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbNpm)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbNama)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbNoBuku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbJudulBuku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbTanggalPeminjaman)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbDenda))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbDenda2)
-                    .addComponent(lbDenda)))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel2)
+                    .addComponent(jLabel9)
+                    .addComponent(lbTenggat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lbDenda2)
+                        .addComponent(lbDenda1))
+                    .addComponent(jLabel8))
+                .addContainerGap())
         );
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -326,10 +350,10 @@ public class FPengembalian extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -345,8 +369,8 @@ public class FPengembalian extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -361,7 +385,7 @@ public class FPengembalian extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String keyw = tfKeyword.getText();
-        String sql = "SELECT a.id as id_peminjaman_detail, b.id as id_peminjaman, d.nama, d.npm, c.judul_buku, a.tenggat_pinjam, c.id_buku, c.stok " +
+        String sql = "SELECT a.id as id_peminjaman_detail, b.id as id_peminjaman, d.nama, d.npm, c.judul_buku, a.tenggat_pinjam, c.id_buku, c.stok, a.tanggal_pinjam " +
                     "FROM peminjaman_detail as a " +
                     "LEFT JOIN peminjaman as b ON a.id_peminjaman = b.id " +
                     "LEFT JOIN buku as c ON a.id_buku = c.id_buku " +
@@ -401,6 +425,7 @@ public class FPengembalian extends javax.swing.JFrame {
                 judul_buku[i] = rs.getString("judul_buku");
                 stok[i] = rs.getInt("stok");
                 denda[i] = hitungTenggat(rs.getString("tenggat_pinjam")) * 1000;
+                tanggal_pinjam[i] = rs.getString("tanggal_pinjam");
                 i++;
             }
         }catch(SQLException ex){
@@ -467,7 +492,7 @@ public class FPengembalian extends javax.swing.JFrame {
         tfKeyword.setText("");
         DefaultTableModel model = (DefaultTableModel) tblHasilCari.getModel();
         model.setRowCount(0);
-        lbDenda.setText("");
+        lbDenda1.setText("");
         lbJudulBuku.setText(":");
         lbNama.setText(":");
         lbNoPemBuk.setText(":");
@@ -477,6 +502,7 @@ public class FPengembalian extends javax.swing.JFrame {
         lbTenggat.setText(":");
         lbNoBuku.setText(":");
         lbNpm.setText(":");
+        lbTanggalPeminjaman.setText(":");
         index = -1;
     }
     
@@ -486,12 +512,12 @@ public class FPengembalian extends javax.swing.JFrame {
                 if (id_peminjaman_detail[i].equals(no_pinjam)){
                     Integer dendaa = denda[i];
                     if(dendaa > 0 ){
-                        lbDenda.setForeground(Color.RED);
+                        lbDenda1.setForeground(Color.RED);
                     }else{
-                        lbDenda.setForeground(Color.BLACK);
+                        lbDenda1.setForeground(Color.BLACK);
                     }
                     String strdenda = dendaa.toString();
-                    lbDenda.setText("Rp." + strdenda);
+                    lbDenda1.setText("Rp." + strdenda);
                     lbJudulBuku.setText(": " + judul_buku[i]);
                     lbNama.setText(": " + nama[i]);
                     lbNoPemBuk.setText(": " + id_peminjaman_detail[i]);
@@ -501,6 +527,7 @@ public class FPengembalian extends javax.swing.JFrame {
                     lbTenggat.setText(": " + tenggat_pinjam[i]);
                     lbNoBuku.setText(": " + id_buku[i]);
                     lbNpm.setText(": " + npm[i]);
+                    lbTanggalPeminjaman.setText(": "+ tanggal_pinjam[i]);
                     index = i;
                 }                
             }
@@ -566,6 +593,7 @@ public class FPengembalian extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -578,6 +606,7 @@ public class FPengembalian extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbDenda;
+    private javax.swing.JLabel lbDenda1;
     private javax.swing.JLabel lbDenda2;
     private javax.swing.JLabel lbJudulBuku;
     private javax.swing.JLabel lbNama;
@@ -585,6 +614,7 @@ public class FPengembalian extends javax.swing.JFrame {
     private javax.swing.JLabel lbNoPem;
     private javax.swing.JLabel lbNoPemBuk;
     private javax.swing.JLabel lbNpm;
+    private javax.swing.JLabel lbTanggalPeminjaman;
     private javax.swing.JLabel lbTenggat;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTable tblHasilCari;

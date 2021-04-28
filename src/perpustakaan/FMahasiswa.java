@@ -93,7 +93,7 @@ public class FMahasiswa extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("DATA BUKU");
+        setTitle("DATA MAHASISWA");
         setMinimumSize(new java.awt.Dimension(1022, 580));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
