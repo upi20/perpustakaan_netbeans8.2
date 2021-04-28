@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Apr 2021 pada 01.52
+-- Waktu pembuatan: 28 Apr 2021 pada 07.27
 -- Versi server: 10.4.18-MariaDB
 -- Versi PHP: 7.4.16
 
@@ -67,10 +67,10 @@ CREATE TABLE `buku` (
 --
 
 INSERT INTO `buku` (`id_buku`, `judul_buku`, `pengarang`, `penerbit`, `tahun`, `genre`, `stok`) VALUES
-(11111110, 'Mandalika', 'JJ. Thompson', 'Sinarpadiu', '2019', 'Novel', 0),
-(11111111, 'Data Mining', 'Dr gunawan', 'Informatika Bandung', '2021', 'Pelajaran', 0),
-(11111112, 'Dear Nathan', 'J.Andika', 'Gramedia', '2018', 'Novel', 16),
-(11111113, 'Permrograman Web', 'wilis', 'Yudistira', '2005', 'Pelajaran', 16);
+(11111110, 'Mandalika', 'JJ. Thompson', 'Sinarpadiu', '2019', 'Novel', 7),
+(11111111, 'Data Mining', 'Dr gunawan', 'Informatika Bandung', '2021', 'Pelajaran', 2),
+(11111112, 'Dear Nathan', 'J.Andika', 'Gramedia', '2018', 'Novel', 12),
+(11111113, 'Permrograman Web', 'wilis', 'Yudistira', '2005', 'Pelajaran', 14);
 
 -- --------------------------------------------------------
 
@@ -89,13 +89,13 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`npm`, `nama`, `tanggal_bergabung`) VALUES
-(123, 's', '2021-04-24 19:19:29'),
 (2113191070, 'Adistia Ramadhani', '2021-04-24 00:00:00'),
 (2113191071, 'T. Taufiq ali', '2021-04-24 00:00:00'),
 (2113191072, 'M Taufiq ilham', '2021-04-23 00:00:00'),
 (2113191073, 'Dara atria', '2021-04-22 00:00:00'),
 (2113191079, 'Isep Lutpi Nur', '2021-04-29 00:00:00'),
-(2113191080, 'Irfan Ramdani', '2021-04-24 17:29:57');
+(2113191080, 'Irfan Ramdani', '2021-04-24 17:29:57'),
+(2113191085, 'Cece Supriatna', '2021-04-25 12:10:52');
 
 -- --------------------------------------------------------
 
@@ -108,6 +108,17 @@ CREATE TABLE `peminjaman` (
   `npm` int(11) DEFAULT NULL,
   `status` enum('Dipinjam','Dikembalikan','Dikembalikan Separuh') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `peminjaman`
+--
+
+INSERT INTO `peminjaman` (`id`, `npm`, `status`) VALUES
+(43, 2113191070, 'Dikembalikan'),
+(44, 2113191072, 'Dikembalikan Separuh'),
+(45, 2113191071, 'Dikembalikan'),
+(46, 2113191070, 'Dikembalikan Separuh'),
+(47, 2113191079, 'Dipinjam');
 
 -- --------------------------------------------------------
 
@@ -126,6 +137,25 @@ CREATE TABLE `peminjaman_detail` (
   `status` enum('Dipinjam','Dikembalikan') NOT NULL,
   `denda` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `peminjaman_detail`
+--
+
+INSERT INTO `peminjaman_detail` (`id`, `id_peminjaman`, `npm`, `id_buku`, `tanggal_pinjam`, `tenggat_pinjam`, `tanggal_kembali`, `status`, `denda`) VALUES
+(38, 43, 2113191070, 11111113, '2021-04-25', '2021-05-09', '0000-00-00', 'Dikembalikan', 0),
+(39, 43, 2113191070, 11111112, '2021-04-25', '2021-05-09', NULL, 'Dikembalikan', 0),
+(40, 43, 2113191070, 11111111, '2021-04-25', '2021-05-09', NULL, 'Dikembalikan', 0),
+(41, 44, 2113191072, 11111110, '2021-04-25', '2021-05-09', '2021-04-26', 'Dikembalikan', 0),
+(42, 44, 2113191072, 11111111, '2021-04-25', '2021-05-09', NULL, 'Dipinjam', 0),
+(43, 44, 2113191072, 11111112, '2021-04-25', '2021-05-09', NULL, 'Dipinjam', 0),
+(44, 45, 2113191071, 11111111, '2021-04-25', '2021-04-01', '2021-04-26', 'Dikembalikan', 25000),
+(45, 46, 2113191070, 11111111, '2021-04-25', '2021-05-09', NULL, 'Dipinjam', 0),
+(46, 46, 2113191070, 11111113, '2021-04-25', '2021-05-09', '2021-04-26', 'Dikembalikan', 0),
+(47, 46, 2113191070, 11111112, '2021-04-25', '2021-05-09', NULL, 'Dipinjam', 0),
+(48, 47, 2113191079, 11111111, '2021-04-26', '2021-05-10', NULL, 'Dipinjam', 0),
+(49, 47, 2113191079, 11111113, '2021-04-26', '2021-05-10', NULL, 'Dipinjam', 0),
+(50, 47, 2113191079, 11111112, '2021-04-26', '2021-05-10', NULL, 'Dipinjam', 0);
 
 --
 -- Indexes for dumped tables
@@ -167,13 +197,13 @@ ALTER TABLE `peminjaman_detail`
 -- AUTO_INCREMENT untuk tabel `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT untuk tabel `peminjaman_detail`
 --
 ALTER TABLE `peminjaman_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
