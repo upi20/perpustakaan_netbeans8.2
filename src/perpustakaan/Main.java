@@ -14,7 +14,11 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        FLogin login = new FLogin();
-        login.setVisible(true);
+//        FLogin login = new FLogin();
+//        login.setVisible(true);
+
+        DataMahasiswa dataMahasiswa = new DataMahasiswa();
+        dataMahasiswa.setVisible(true);
+        
     }
 }
